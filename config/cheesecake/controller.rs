@@ -1,3 +1,7 @@
+/// # Create Routes
+///
+/// Helper macro to create routes for the application
+/// using a custom DSL.
 #[macro_export]
 macro_rules! create_routes {
 
@@ -42,7 +46,7 @@ macro_rules! create_routes {
         create_routes!(@parse $router $($rest)*);
     };
 
-    // Base case
+    // No more tokens left
     (@parse $router:ident) => {};
 
     // Error during last statement without comma
@@ -55,6 +59,7 @@ macro_rules! create_routes {
         compile_error!(stringify!(Invalid syntax while parsing statement: $($stm)*));
     };
 
+    // Initial macro invocation
     ($($tts:tt)*) => {{
         let router = Router::new();
         create_routes!(@parse router $($tts)*);
