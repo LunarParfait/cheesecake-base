@@ -1,42 +1,65 @@
-use crate::app::app_state::AppState;
-use axum::Router;
-
-pub trait Controller {
-    fn router() -> (&'static str, Router<AppState>);
-}
-
-#[macro_export]
-macro_rules! create_single_route {
-    ($routes:ident, $controller:ident) => {
-        let (name, crouter) = $controller::router();
-        if name == "/" {
-            $routes = $routes.merge(crouter);
-        } else {
-            $routes = $routes.nest(name, crouter);
-        }
-    };
-}
-
-#[macro_export]
-macro_rules! create_routes_internal {
-    ($routes:ident, $controller:ident) => {
-        create_single_route! { $routes, $controller }
-    };
-
-    ($routes:ident, $controller:ident, $($other:ident),+) => {
-        create_single_route! { $routes, $controller }
-        create_routes! { $routes, $($other),+ };
-    };
-}
-
 #[macro_export]
 macro_rules! create_routes {
-    ($($controller:ident),+) => {{
-        use config::create_routes_internal;
-        use config::create_single_route;
-        use config::cheesecake::controller::Controller;
-        let mut routes = Router::new();
-        create_routes_internal! { routes, $($controller),+ };
-        routes
+
+    // Nesting routes at root
+    // route ["/"?] => [router]
+    (@parse $router:ident route $("/")? => $inner:expr, $($rest:tt)*) => {
+        let $router = $router.merge($inner);
+        create_routes!(@parse $router $($rest)*);
+    };
+
+    // Nesting routes
+    // route [path] => [router]
+    (@parse $router:ident route $path:literal => $inner:expr, $($rest:tt)*) => {
+        let $router = $router.nest($path, $inner);
+        create_routes!(@parse $router $($rest)*);
+    };
+
+    // Creating simple routes
+    // [method] [path] => [handler]
+    (@parse $router:ident $method:ident $path:literal => $handler:expr, $($rest:tt)*) => {
+        let $router = $router.route($path, $method($handler));
+        create_routes!(@parse $router $($rest)*);
+    };
+
+    // Adding middleware
+    // with [middleware] => [router]
+    (@parse $router:ident with $middleware:expr => $inner:expr, $($rest:tt)*) => {
+        let $router = $router.merge(
+            Router::new()
+            .layer($middleware)
+            .merge($inner));
+        create_routes!(@parse $router $($rest)*);
+    };
+
+    // Nesting routes with middleware
+    // route [path] with [middleware] => [router]
+    (@parse $router:ident route $path:literal with $middleware:expr => $inner:expr, $($rest:tt)*) => {
+        let $router = $router.nest($path,
+            Router::new()
+            .layer($middleware)
+            .merge($inner));
+        create_routes!(@parse $router $($rest)*);
+    };
+
+    // Base case
+    (@parse $router:ident) => {};
+
+    // Error during last statement without comma
+    (@parse $router:ident $($stm:tt)*) => {
+        compile_error!(stringify!(Invalid syntax while parsing statement: $($stm)*));
+    };
+
+    // Error during some statement with comma
+    (@parse $router:ident $($stm:tt)*, $($tts:tt)*) => {
+        compile_error!(stringify!(Invalid syntax while parsing statement: $($stm)*));
+    };
+
+    ($($tts:tt)*) => {{
+        let router = Router::new();
+        create_routes!(@parse router $($tts)*);
+
+        router
     }};
+
 }
