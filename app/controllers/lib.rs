@@ -5,11 +5,10 @@ use config::create_routes;
 
 pub mod index;
 
+// TODO: move this to different file
 pub fn router() -> Router<AppState> {
     //
     // Routing configuration
-    // CLI will append at the end of this macro
-    //
     // Statements take one of the forms:
     //
     // [method] [path] => [handler],
