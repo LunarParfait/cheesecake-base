@@ -2,5 +2,5 @@
 /target
 /dist
 /logs
-/storage
+/storage/db
 .env.local
