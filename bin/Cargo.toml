@@ -1,6 +1,5 @@
 [package]
 name = "bin"
-version = "0.1.0"
 edition = "2024"
 
 [[bin]]
@@ -8,9 +7,9 @@ path = "main.rs"
 name = "cheesecake-app"
 
 [dependencies]
-dotenvy = "0.15.7"
-tokio = { version = "1.44.2", features = ["macros", "rt-multi-thread", "signal"] }
-tracing = "0.1.41"
+dotenvy = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
 config = { path = "../config" }
-axum = { version = "0.8.3", features = ["tokio"] }
+axum = { workspace = true }
 controllers = { path = "../app/controllers" }

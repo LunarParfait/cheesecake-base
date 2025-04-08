@@ -405,7 +405,7 @@ dependencies = [
 
 [[package]]
 name = "bin"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "axum",
  "config",
@@ -652,7 +652,7 @@ dependencies = [
 
 [[package]]
 name = "config"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -680,7 +680,7 @@ checksum = "c2459377285ad874054d797f3ccebf984978aa39129f6eafde5cdc8315b612f8"
 
 [[package]]
 name = "controllers"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "axum",
@@ -882,7 +882,7 @@ dependencies = [
 
 [[package]]
 name = "entities"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "sea-orm",
  "serde",
@@ -1773,7 +1773,7 @@ checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
 name = "migration"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "async-std",
  "sea-orm-migration",
@@ -3371,9 +3371,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.44.1"
+version = "1.44.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f382da615b842244d4b8738c82ed1275e6c5dd90c459a30941cd07080b06c91a"
+checksum = "e6b88822cbe49de4185e3a4cbf8321dd487cf5fe0c5c65695fef6346371e9c48"
 dependencies = [
  "backtrace",
  "bytes",
@@ -3756,7 +3756,7 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 
 [[package]]
 name = "views"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "anyhow",
  "axum",
