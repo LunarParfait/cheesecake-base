@@ -14,6 +14,8 @@ pub struct AppStateFactory;
 
 #[async_trait]
 impl AppStateFactoryTrait<AppState> for AppStateFactory {
+    /// Initializing AppState, which will be injected into
+    /// each route handler
     async fn create() -> AppState {
         let mut opt = ConnectOptions::new(BASE_ENV.database_url);
         opt.max_connections(10)

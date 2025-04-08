@@ -1,8 +1,7 @@
+use anyhow::bail;
 use std::ops::Deref;
 use std::str::FromStr;
 use std::sync::OnceLock;
-
-use anyhow::bail;
 
 /// Useful when you want to handle the Result yourself, and do not want the
 /// result to be leaked.
