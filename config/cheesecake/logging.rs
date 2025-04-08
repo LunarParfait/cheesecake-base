@@ -1,11 +1,10 @@
+use super::env::BASE_ENV;
 use std::fs::File;
 use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tracing_subscriber::EnvFilter;
 use tracing_subscriber::prelude::*;
-
-use super::env::BASE_ENV;
 
 pub async fn init_logging() {
     if cfg!(debug_assertions) {
