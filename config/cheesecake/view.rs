@@ -9,17 +9,22 @@ use std::sync::RwLock;
 use tera::Tera;
 #[cfg(debug_assertions)]
 use tokio::sync::watch;
+use tracing::error;
 
 #[cfg(debug_assertions)]
 static TERA: LazyLock<RwLock<Tera>> = LazyLock::new(|| {
-    Tera::new(concat!("resources/templates", "**/*.html"))
-        .unwrap()
-        .into()
+    match Tera::new(concat!("resources/templates", "**/*.html")) {
+        Ok(t) => t.into(),
+        Err(e) => panic!("Error during template building: {e}"),
+    }
 });
 
 #[cfg(not(debug_assertions))]
 static TERA: LazyLock<Tera> = LazyLock::new(|| {
-    Tera::new(concat!("dist/templates", "**/*.html")).unwrap()
+    match Tera::new(concat!("dist/templates", "**/*.html"))  {
+        Ok(t) => t,
+        Err(e) => panic!("Error during template building: {e}"),
+    }
 });
 
 #[cfg(debug_assertions)]
@@ -40,7 +45,10 @@ static HOTWATCH: LazyLock<Hotwatch> = LazyLock::new(|| {
                 EventKind::Any | EventKind::Other => (),
                 _ => {
                     HOTWATCH_CHANNEL.0.send(()).unwrap();
-                    TERA.write().unwrap().full_reload().unwrap();
+                    match TERA.write().unwrap().full_reload() {
+                        Ok(_) => {},
+                        Err(e) => error!("Error during hot reload: {e}"),
+                    };
                 }
             };
         })

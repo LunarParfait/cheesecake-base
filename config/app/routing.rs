@@ -12,6 +12,7 @@ use tower::load_shed::{self, LoadShedLayer};
 use tower_http::timeout::TimeoutLayer;
 use tower_http::trace::TraceLayer;
 
+/// Base router configuration
 pub fn router(app_state: AppState) -> Router<AppState> {
     let max_connections = app_state
         .pool
@@ -28,6 +29,7 @@ pub fn router(app_state: AppState) -> Router<AppState> {
         ))
 }
 
+/// Telling axum how to handle errors on request
 async fn handle_error(err: BoxError) -> Response<Body> {
     if err.is::<load_shed::error::Overloaded>() {
         return StatusCode::SERVICE_UNAVAILABLE.into_response();

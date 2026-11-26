@@ -1,7 +1,6 @@
-use std::fmt::Display;
-
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
+use std::fmt::Display;
 use tracing::error;
 
 fn cut_trace(trace: &str) -> &str {
@@ -15,7 +14,6 @@ fn cut_trace(trace: &str) -> &str {
         .unwrap_or("[backtrace unavailable]")
 }
 
-// Make our own error that wraps `anyhow::Error`.
 pub struct AppError(anyhow::Error);
 
 impl Display for AppError {
@@ -27,7 +25,6 @@ impl Display for AppError {
     }
 }
 
-// Tell axum how to convert `AppError` into a response.
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         error!("{}", self.to_string());

@@ -5,7 +5,6 @@ use config::create_routes;
 
 pub mod index;
 
-// TODO: move this to different file
 pub fn router() -> Router<AppState> {
     //
     // Routing configuration
